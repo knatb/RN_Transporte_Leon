@@ -1,0 +1,171 @@
+import React, { Component } from 'react';
+import {TextInput, View, Text, StyleSheet, RNPicker, Image, TouchableOpacity} from 'react-native';
+import logo from '../assets/leon-logo.png';
+import firebase from 'firebase'
+require('firebase/auth')
+
+export default class RegisterScreen extends Component {
+    state = {
+        fname: "",
+        lname: "",
+        age: 0,
+        sexo: "",
+        curp:  "",
+        password: "",
+        cpassword: "",
+        errorMessage: null
+    }
+
+    handleRegister  = () => {
+        let error = {};
+        let curpEmail = `${curp}@fieras.com`;
+        firebase.auth().createUserWithEmailAndPassword(this.state.curpEmail, this.state.password)
+        .then(useCredentials => {
+          return useCredentials.user.updateProfile({
+              displayName: this.state.fname
+          })
+        })
+        .catch(error => this.setState({errorMessage: error.message}));
+        /*
+        const {curp, password} = this.state;
+        
+        if(!validateEmail(curpEmail)){
+            error.errorMessage = true;
+        } else {
+            console.log(curpEmail);
+            firebase.auth().signInWithEmailAndPassword(curpEmail,password)
+            .then(() => { console.log("OK");})
+            .catch(error => this.setState({errorMessage: error.message}));
+        }*/
+    }
+
+    render() {
+        return (
+            <View style = {styles.viewLogin}>
+                <Image source={logo} style={{ width: 280, height: 230 }} /> 
+                <View>
+                    <TextInput 
+                        style={styles.inputs} 
+                        placeholder='Nombre(s)' 
+                        keyboardType='default'
+                        onChangeText={fname => this.setState({fname})}
+                        value={this.state.fname}
+                    />
+                    <TextInput 
+                        style={styles.inputs} 
+                        placeholder='Apellido(s)' 
+                        keyboardType='default'
+                        onChangeText={lname => this.setState({lname})}
+                        value={this.state.lname}
+                    />
+                    <TextInput 
+                        style={styles.selectPicker} 
+                        placeholder='Edad' 
+                        keyboardType='numeric'
+                        onChangeText={age => this.setState({age})}
+                        value={this.state.age}
+                    />
+                    <TextInput 
+                        style={styles.selectPicker} 
+                        placeholder='Sexo' 
+                        keyboardType='default'
+                        onChangeText={sexo => this.setState({sexo})}
+                        value={this.state.sexo}
+                    />
+                    <TextInput 
+                        style={styles.inputs} 
+                        placeholder='Curp' 
+                        keyboardType='default'
+                        onChangeText={curp => this.setState({curp})}
+                        value={this.state.curp}
+                    />
+                    <TextInput 
+                        style={styles.inputs} 
+                        placeholder='Contraseña' 
+                        keyboardType='default'
+                        secureTextEntry
+                        onChangeText={password => this.setState({password})}
+                        value={this.state.password}
+                    />
+                    <TextInput 
+                        style={styles.inputs} 
+                        placeholder='Confirmar contraseña' 
+                        keyboardType='default'
+                        secureTextEntry
+                        onChangeText={cpassword => this.setState({cpassword})}
+                        value={this.state.cpassword}
+                    />
+                    <View>
+                        <TouchableOpacity onPress={this.handleRegister}>
+                            <Text style={styles.btnLogin} >Registrarme</Text>
+                        </TouchableOpacity>
+                    </View> 
+                </View>
+            </View>
+        )
+    }
+}
+
+const styles = StyleSheet.create({
+    containers: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    viewLogin: {
+        flex: 1,
+        flexDirection: 'column',        
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FFF',
+    },
+    viewForm:{
+        width: '100%'
+    },
+    inputs: {
+        backgroundColor: '#BFBFBF',
+        color: '#000000',
+        borderColor: '#EB9142',
+        fontWeight: 'normal',
+        fontSize: 16,
+        marginTop: 10,
+        marginBottom: 20,
+        height: 40,
+        padding: 10,
+        borderRadius: 7
+    },
+    btnLogin:{
+        fontSize: 20,
+        backgroundColor: '#404040',
+        color: '#FFF',
+        alignSelf: 'center',
+        width: '100%',
+        padding: 15,
+        textAlign: 'center',
+        borderRadius: 7
+    },    
+    errorInput:{
+        borderColor: "#940c0c"
+    },
+    row: {
+        flex: 1,
+        flexDirection: "row"
+      },
+      inputWrap: {
+        flex: 1,
+        borderColor: "#cccccc",
+        borderBottomWidth: 1,
+        marginBottom: 10
+      },
+      selectPicker: {
+        backgroundColor: '#BFBFBF',
+        color: '#FFF',
+        borderColor: '#EB9142',
+        fontWeight: 'normal',
+        fontSize: 20,
+        marginTop: 10,
+        marginBottom: 10,
+        height: 40,
+        padding: 10
+    }
+  });
