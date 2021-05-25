@@ -1,28 +1,19 @@
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import * as firebase from 'firebase'
+import {View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import firebase from 'firebase'
+require('firebase/auth')
 
-export default class TransactScreen extends Component {
-
-    state = {
-        curp: "",
-        displayName: ""
-    }
-
+export default class HomeScreen extends Component {
     componentDidMount(){
-        const {curp, displayName} = firebase.auth().currentUser;
-
-        this.setState({curp, displayName});
-    }
-
-    signOutUser = () => {
-        firebase.auth().signOut();
+        firebase.auth().onAuthStateChanged(user => {
+            this.props.navigation.navigate( user ? "App" : "Auth");
+        })
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <Text>HOME SCREEN</Text>
+                <Text>Transact Screen</Text>
             </View>
         )
     }

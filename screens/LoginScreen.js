@@ -4,7 +4,6 @@ import logo from '../assets/leon-logo.png';
 import firebase from 'firebase'
 require('firebase/auth')
 import { validateEmail } from '../utils/validate';
-
 export default class LoginScreen extends Component {
 
     static navigationOptions = {
@@ -26,7 +25,8 @@ export default class LoginScreen extends Component {
         } else {
             console.log(curpEmail);
             firebase.auth().signInWithEmailAndPassword(curpEmail,password)
-            .then(() => { console.log("OK");})
+            .then(() => { console.log("OK"); this.props.navigation.navigate("Tabs")})
+            
             .catch(error => this.setState({errorMessage: error.message}));
         }
     }

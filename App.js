@@ -1,14 +1,13 @@
-import 'react-native-gesture-handler';
 import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import 'react-native-gesture-handler';
 
-import LoginScreen from  './screens/LoginScreen';
-import RegisterScreen from  './screens/RegisterScreen';
-import Navigation from  './screens/Navigation';
-
+import { NavigationContainer} from '@react-navigation/native';
 import firebase from 'firebase';
 require('firebase/auth')
+import LoginScreen from  './screens/LoginScreen';
+import RegisterScreen from  './screens/RegisterScreen';
+import Tabs from './navigation/tabs';
+import { createStackNavigator } from "@react-navigation/stack";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAKde-zTd16g1kVoDObItZaj5MBXWCIUY4",
@@ -39,8 +38,8 @@ export default function App() {
         />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen
-          name="Home"
-          component={Navigation}
+          name="Tabs"
+          component={Tabs}
           options={{ header: () => null }}
         />
       </Stack.Navigator>
