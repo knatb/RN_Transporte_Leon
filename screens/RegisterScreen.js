@@ -17,32 +17,29 @@ export default class RegisterScreen extends Component {
     }
 
     handleRegister  = () => {
+        const {curp, password} = this.state;
         let error = {};
         let curpEmail = `${curp}@fieras.com`;
-        firebase.auth().createUserWithEmailAndPassword(this.state.curpEmail, this.state.password)
-        .then(useCredentials => {
-          return useCredentials.user.updateProfile({
-              displayName: this.state.fname
-          })
-        })
-        .catch(error => this.setState({errorMessage: error.message}));
-        /*
-        const {curp, password} = this.state;
-        
-        if(!validateEmail(curpEmail)){
+        if(this.state.password != this.state.cpassword){
             error.errorMessage = true;
         } else {
-            console.log(curpEmail);
-            firebase.auth().signInWithEmailAndPassword(curpEmail,password)
-            .then(() => { console.log("OK");})
+            firebase.auth().createUserWithEmailAndPassword(curpEmail, password)
+            .then(useCredentials => {
+            return useCredentials.user.updateProfile({
+                displayName: this.state.fname
+            })
+            })
             .catch(error => this.setState({errorMessage: error.message}));
-        }*/
+        }
     }
 
     render() {
         return (
             <View style = {styles.viewLogin}>
                 <Image source={logo} style={{ width: 280, height: 230 }} /> 
+                <View style={styles.error}>
+                    <Text>{this.state.errorMessage && <Text>{this.state.errorMessage}</Text>}</Text>
+                </View>
                 <View>
                     <TextInput 
                         style={styles.inputs} 
@@ -167,5 +164,9 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         height: 40,
         padding: 10
+    },    
+    error: {
+        alignItems: 'center',
+        justifyContent: 'center',
     }
   });
