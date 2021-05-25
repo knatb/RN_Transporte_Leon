@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import {View, StyleSheet, ActivityIndicator, Image } from 'react-native';
+import mapa from '../assets/mapa.png'
 import firebase from 'firebase'
 require('firebase/auth')
 
@@ -13,7 +14,7 @@ export default class HomeScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Home</Text>
+                <Image source={mapa} style={{ width: 320, height: 750 }}></Image>
             </View>
         )
     }

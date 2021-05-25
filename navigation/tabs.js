@@ -14,10 +14,9 @@ const Tabs = () => {
     return(
            <Tab.Navigator>
                 <Tab.Screen name="Home" component={HomeScreen}/>
-                <Tab.Screen name="Edit" component={EditProfileScreen}/>
-                <Tab.Screen name="Profile" component={ProfileScreen}/>
                 <Tab.Screen name="Transact" component={TransactScreen}/>
-                <Tab.Screen name="Loading" component={LoadingScreen}/>
+                <Tab.Screen name="Profile" component={ProfileScreen}/>
+                <Tab.Screen name="Edit" component={EditProfileScreen}/>
             </Tab.Navigator>
     );
 }
