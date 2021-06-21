@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
-import {TextInput, View, Text, StyleSheet, RNPicker, Image, TouchableOpacity} from 'react-native';
+import {TextInput, View, Button, Platform, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import logo from '../assets/leon-logo.png';
 import firebase from 'firebase'
 require('firebase/auth')
 
 export default class RegisterScreen extends Component {
+
     state = {
         fname: "",
         lname: "",
-        age: 0,
+        date: (new Date()),
         sexo: "",
         curp:  "",
         password: "",
         cpassword: "",
-        errorMessage: null
+        errorMessage: null,
+        show: false,
+        mode: 'date'
     }
 
     handleRegister  = () => {
@@ -25,14 +29,14 @@ export default class RegisterScreen extends Component {
         } else {
             firebase.auth().createUserWithEmailAndPassword(curpEmail, password)
             .then(useCredentials => {
-            return firebase.firestore().collection('usuarios').doc(useCredentials.user.uid).set({
-                firstName: fname,
-                lastName: lname,
-                age: age,
-                gender: sexo,
-                curp: curpEmail,
-                password: password
-            })
+                return firebase.firestore().collection('usuarios').doc(useCredentials.user.uid).set({
+                    firstName: fname,
+                    lastName: lname,
+                    age: age,
+                    gender: sexo,
+                    curp: curpEmail,
+                    password: password
+                })
             })
             .then(() => { console.log("REGISTRO EXITOSO"); console.log(this.state); this.props.navigation.navigate("Login")})
             .catch(error => this.setState({errorMessage: error.message}));
@@ -40,11 +44,30 @@ export default class RegisterScreen extends Component {
     }
 
     render() {
+
+
+        const onChangeDate = (event, selectedDate) => {
+            const currentDate = selectedDate || this.state.date;
+            this.setState({date:currentDate});
+            console.log(this.state.date);
+          };
+
+        const showMode = (currentMode) => {
+            this.setState({show: true});
+            this.setState({mode: currentMode});
+        };
+        
+        const showDatepicker = () => {
+            showMode('date');
+        };
+
         return (
             <View style = {styles.viewLogin}>
                 <Image source={logo} style={{ width: 280, height: 230 }} /> 
                 <View style={styles.error}>
-                    <Text>{this.state.errorMessage && <Text>{this.state.errorMessage}</Text>}</Text>
+                    <Text>{this.state.errorMessage && 
+                        <Text>{this.state.errorMessage}</Text>}
+                    </Text>
                 </View>
                 <View>
                     <TextInput 
@@ -61,15 +84,22 @@ export default class RegisterScreen extends Component {
                         onChangeText={lname => this.setState({lname})}
                         value={this.state.lname}
                     />
+                    <View>
+                        <TouchableOpacity onPress={showDatepicker}>
+                            <Text style={styles.btnDate} >Seleccionar fecha de nacimiento</Text>
+                        </TouchableOpacity>
+                        {this.state.show && (
+                            <DateTimePicker
+                            testID="dateTimePicker"
+                            value={this.state.date}
+                            is24Hour={true}
+                            display="default"
+                            onChange={onChangeDate}
+                            />
+                        )}
+                    </View>
                     <TextInput 
-                        style={styles.selectPicker} 
-                        placeholder='Edad' 
-                        keyboardType='numeric'
-                        onChangeText={age => this.setState({age})}
-                        value={this.state.age}
-                    />
-                    <TextInput 
-                        style={styles.selectPicker} 
+                        style={styles.inputs} 
                         placeholder='Sexo' 
                         keyboardType='default'
                         onChangeText={sexo => this.setState({sexo})}
@@ -131,8 +161,8 @@ const styles = StyleSheet.create({
         borderColor: '#EB9142',
         fontWeight: 'normal',
         fontSize: 16,
-        marginTop: 10,
-        marginBottom: 20,
+        marginTop: 5,
+        marginBottom: 15,
         height: 40,
         padding: 10,
         borderRadius: 7
@@ -146,31 +176,24 @@ const styles = StyleSheet.create({
         padding: 15,
         textAlign: 'center',
         borderRadius: 7
-    },    
+    },
+    btnDate:{
+        fontSize: 20,
+        backgroundColor: '#EB9142',
+        color: '#FFF',
+        alignSelf: 'center',
+        width: '100%',
+        padding: 15,
+        textAlign: 'center',
+        borderRadius: 7
+    },   
     errorInput:{
         borderColor: "#940c0c"
     },
     row: {
         flex: 1,
         flexDirection: "row"
-      },
-      inputWrap: {
-        flex: 1,
-        borderColor: "#cccccc",
-        borderBottomWidth: 1,
-        marginBottom: 10
-      },
-      selectPicker: {
-        backgroundColor: '#BFBFBF',
-        color: '#FFF',
-        borderColor: '#EB9142',
-        fontWeight: 'normal',
-        fontSize: 20,
-        marginTop: 10,
-        marginBottom: 10,
-        height: 40,
-        padding: 10
-    },    
+    },
     error: {
         alignItems: 'center',
         justifyContent: 'center',

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, Text } from 'react-native';
 import { getRoutes } from './api/RoutesApi';
 import { ListItem } from 'react-native-elements'
 
@@ -9,17 +9,14 @@ export default class RoutesList extends Component {
         routesList : [],
         currentRouteItem: null,
     }
-
-    /*onRouteAdded = (ruta) => {
-        console.log("Ruta Agregada");
-        console.log(ruta);
-    }*/
+    
     onRoutesReceived = (routesList) => {
         console.log(routesList);
         this.setState(prevState => ({
             routesList: prevState.routesList = routesList
         }));
     }
+    
     componentDidMount(){
         getRoutes(this.onRoutesReceived); 
     }
@@ -36,6 +33,9 @@ export default class RoutesList extends Component {
                         <ListItem.Content>
                             <ListItem.Title>{l.nombre}</ListItem.Title>
                             <ListItem.Subtitle>{l.tipoRuta}</ListItem.Subtitle>
+                            <View style={styles.subtitleView}>
+                            <Text style={styles.ratingText}>Recorrido: {l.recorrido} km</Text>
+                        </View>
                         </ListItem.Content>
                         </ListItem>
                     ))
@@ -54,4 +54,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'pink',
         marginHorizontal: 20,
     },
+    subtitleView: {
+        flexDirection: 'row',
+        paddingTop: 5
+    },
+    ratingText: {
+        color: 'grey'
+    }
 })

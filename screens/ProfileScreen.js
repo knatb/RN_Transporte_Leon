@@ -1,15 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Directions } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import firebase from 'firebase'
 require('firebase/auth')
-// import EditProfileScreen from './EditProfileScreen';
 
 export default class ProfileScreen extends Component {
-
-    //const navigation = useNavigation();
-    //() => navigation.popToTop()
 
     handleLogOut = () => { 
         firebase.auth().signOut().then(() => {
