@@ -7,6 +7,7 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import TransactScreen from '../screens/TransactScreen';
 import LoadingScreen from '../screens/LoadingScreen';
+import RoutesList from '../screens/RoutesList';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,6 +18,7 @@ const Tabs = () => {
                 <Tab.Screen name="Transact" component={TransactScreen}/>
                 <Tab.Screen name="Profile" component={ProfileScreen}/>
                 <Tab.Screen name="Edit" component={EditProfileScreen}/>
+                <Tab.Screen name="Rutas Disponibles" component={RoutesList}/>
             </Tab.Navigator>
     );
 }
