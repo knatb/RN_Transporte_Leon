@@ -4,6 +4,7 @@ import logo from '../assets/leon-logo.png';
 import firebase from 'firebase'
 require('firebase/auth')
 import { validateEmail } from '../utils/validate';
+
 export default class LoginScreen extends Component {
 
     static navigationOptions = {

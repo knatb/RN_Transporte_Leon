@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
         height: 300,
         width: 300,
         backgroundColor: '#BFBFBF',
-        borderRadius: 20
+        borderRadius: 20,
+        marginBottom: 150
     },
     fileSelect:{
         alignSelf: 'center',

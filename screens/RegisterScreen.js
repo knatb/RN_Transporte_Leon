@@ -25,10 +25,16 @@ export default class RegisterScreen extends Component {
         } else {
             firebase.auth().createUserWithEmailAndPassword(curpEmail, password)
             .then(useCredentials => {
-            return useCredentials.user.updateProfile({
-                displayName: this.state.fname
+            return firebase.firestore().collection('usuarios').doc(useCredentials.user.uid).set({
+                firstName: fname,
+                lastName: lname,
+                age: age,
+                gender: sexo,
+                curp: curpEmail,
+                password: password
             })
             })
+            .then(() => { console.log("REGISTRO EXITOSO"); console.log(this.state); this.props.navigation.navigate("Login")})
             .catch(error => this.setState({errorMessage: error.message}));
         }
     }

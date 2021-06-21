@@ -1,35 +1,45 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Directions } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import firebase from 'firebase'
+require('firebase/auth')
+// import EditProfileScreen from './EditProfileScreen';
 
-const ProfileScreen = () => {
+export default class ProfileScreen extends Component {
 
-    const navigation = useNavigation();
+    //const navigation = useNavigation();
+    //() => navigation.popToTop()
 
-    return(
-    <View style = {styles.view}>
-        <View style={styles.datos}>
-            <Text>Francisco Fernando Cruz Galvez</Text>
-            <Text>90 años</Text>
-            <Text>Sexo: Otro</Text>
-            <Text>Pagobus: Preferencial</Text>
+    handleLogOut = () => { 
+        firebase.auth().signOut().then(() => {
+            console.log('SALIÓ'); 
+            this.props.navigation.navigate("Login")}
+        )
+    }
+
+    render() {
+        return (
+        <View style = {styles.view}>
+            <View style={styles.datos}>
+                <Text>Francisco Fernando Cruz Galvez</Text>
+                <Text>90 años</Text>
+                <Text>Sexo: Otro</Text>
+                <Text>Pagobus: Preferencial</Text>
+            </View>
+            <View style={styles.buttonsView}>
+                <TouchableOpacity onPress={this.handleLogOut}>
+                    <Text style={styles.buttons} >CERRAR SESIÓN</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Text style={styles.buttonDel} >ELIMINAR CUENTA</Text>
+                </TouchableOpacity>
+            </View>
         </View>
-        <View style={styles.buttonsView}>
-        <TouchableOpacity >
-            <Text style={styles.buttons} >EDITAR CUENTA</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.popToTop()}>
-            <Text style={styles.buttons} >CERRAR SESIÓN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-            <Text style={styles.buttonDel} >ELIMINAR CUENTA</Text>
-        </TouchableOpacity>
-        </View>
-    </View>
-    )
+        )
+    }
 }
-
+// UWU 
 const styles = StyleSheet.create({
     view: {
         backgroundColor: '#FFF',
@@ -78,7 +88,7 @@ const styles = StyleSheet.create({
     },
   });
 
-  export default ProfileScreen;
+  //export default ProfileScreen;
 
   // gris claro #BFBFBF
   // gris #404040

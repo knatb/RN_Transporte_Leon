@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Button } from 'react-native';
 import { Directions } from 'react-native-gesture-handler';
 
-const EditProfile = ({navigation}) => {
+
+function showCurp(){
+    var str = "lolk000708hgtppna1@fieras.com";
+    var res = str.split("@");
+    //document.getElementById("demo").innerHTML = res[0];
+}
+
+const EditProfileScreen = ({navigation}) => {
     const [Fname, onChangeFName] = React.useState("");
     const [Lname, onChangeLName] = React.useState("");
     const [Age, onChangeAge] = React.useState("");
@@ -15,45 +22,45 @@ const EditProfile = ({navigation}) => {
             
             <View style = {styles.viewForm}>
             <TextInput 
-                    style={styles.inputs} 
-                    placeholder='LOLK000708HGTPPNA1' 
+                    style={styles.inputs}
+                    placeholder='LOLK000708HGTPPNA1'
                     keyboardType='default'
                     onChangeText={onChangeCurp}
                     value={curp}
-                    editable={false} 
+                    editable={false}
                     selectTextOnFocus={false}
                 />
                 <TextInput 
-                    style={styles.inputs} 
-                    placeholder='Nombre(s)' 
-                    keyboardType='default'                    
+                    style={styles.inputs}
+                    placeholder='Nombre(s)'
+                    keyboardType='default'                   
                     onChangeText={onChangeFName}
                     value={Fname}
                 />
                 <TextInput 
-                    style={styles.inputs} 
+                    style={styles.inputs}
                     placeholder='Apellido(s)'
                     keyboardType='default'
                     onChangeText={onChangeLName}
                     value={Lname}
                 />                      
                 <TextInput 
-                    style={styles.selectPicker} 
-                    placeholder='Edad' 
+                    style={styles.selectPicker}
+                    placeholder='Edad'
                     keyboardType='numeric'
                     onChangeText={onChangeAge}
                     value={Age}
                 />
                 <TextInput 
-                    style={styles.selectPicker} 
-                    placeholder='Sexo' 
+                    style={styles.selectPicker}
+                    placeholder='Sexo'
                     keyboardType='default'
                     onChangeText={onChangeGender}
                     value={Gender}
                 />
                 <TextInput 
-                    style={styles.inputs} 
-                    placeholder='Contraseña' 
+                    style={styles.inputs}
+                    placeholder='Contraseña'
                     keyboardType='default'
                     secureTextEntry
                     onChangeText={onChangePassword}
@@ -162,4 +169,4 @@ const pickerStyle = StyleSheet.create({
     }
 });
 
-export default EditProfile;
+export default EditProfileScreen;
