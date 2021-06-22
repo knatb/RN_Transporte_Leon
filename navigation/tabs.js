@@ -11,7 +11,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import TransactScreen from '../screens/TransactScreen';
 import LoadingScreen from '../screens/LoadingScreen';
 import RoutesList from '../screens/RoutesList';
-
+import FileUpload from '../screens/FileUpload'
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +46,6 @@ const Tabs = () => {
                 } else if (route.name === 'Edit') {
                     iconName = focused ? 'people-circle' : 'person-outline';
                 } 
-                // You can return any component that you like here!
                 return <Ionicons name={iconName} size={size} color={color} />;
                 },
             })}
@@ -60,6 +59,8 @@ const Tabs = () => {
             <Tab.Screen name="Profile" component={ProfileScreen} />
             <Tab.Screen name="Edit" component={EditProfileScreen} />
             <Tab.Screen name = "Rutas" component={RoutesList} />
+            <Tab.Screen name = "Archivos" component={FileUpload} />
+            
         </Tab.Navigator>
     );
 }

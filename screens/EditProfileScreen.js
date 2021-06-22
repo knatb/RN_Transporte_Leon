@@ -74,12 +74,12 @@ const EditProfileScreen = ({navigation}) => {
                 />
                 <View style = {styles.containers}>
                 <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                        <Text style={styles.btnUpdate} >CANCELAR</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                        <Text style={styles.btnUpdate} >ACTUALIZAR CUENTA</Text>
-                    </TouchableOpacity>
-                </View> 
+                    <Text style={styles.btnUpdate} >CANCELAR</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                    <Text style={styles.btnUpdate} >ACTUALIZAR CUENTA</Text>
+                </TouchableOpacity>
+            </View> 
             </View>
         </View>
     )
