@@ -1,18 +1,66 @@
 import React, { Component, useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { Directions } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import firebase from 'firebase'
 require('firebase/auth')
 
 export default class ProfileScreen extends Component {
+  
+    state = {
+        fname: "",
+        lname: "",
+        date: (new Date()),
+        deud: "",
+        venc: (new Date()),
+        errorMessage: null,
+    }
 
     handleLogOut = () => { 
         firebase.auth().signOut().then(() => {
             console.log('SALIÓ'); 
-            this.props.navigation.navigate("Login")}
-        )
+            this.props.navigation.navigate("Login")
+            this.state.fname = "";
+        });
     }
+
+    handleDelete = async() => {
+        await firebase.firestore().collection('usuariosLeon').doc(user.uid).delete().then((value)=> {
+            this.handleLogOut;
+            user.delete();
+        })
+    }
+
+    getData = async() => {
+        const usuariosCol = firebase.firestore().collection('usuariosLeon')
+        try{
+            const dataUser = [];
+            const snapshot = await usuariosCol.doc(user.uid).get();
+
+            snapshot.forEach((doc) => {
+                dataUser.push(doc.data());
+            })
+
+        } catch(error){
+
+        }
+        
+    }
+
+    createAlert = () =>
+        Alert.alert(
+        "Eliminar cuenta",
+        "¿Desea eliminar su cuenta?",
+        [
+            {
+                text: "Cancelar",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+            },
+            { text: "Sí, estoy seguro", onPress: () => this.handleDelete }
+        ],
+        { cancelable: false }
+    );
 
     render() {
         return (
@@ -21,14 +69,13 @@ export default class ProfileScreen extends Component {
             <View style={styles.datos}>
                 <Text>Francisco Fernando Cruz Galvez</Text>
                 <Text>90 años</Text>
-                <Text>Sexo: Otro</Text>
                 <Text>Pagobus: Preferencial</Text>
             </View>
             <View style={styles.buttonsView}>
                 <TouchableOpacity onPress={this.handleLogOut}>
                     <Text style={styles.buttons} >CERRAR SESIÓN</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={this.createAlert}>
                     <Text style={styles.buttonDel} >ELIMINAR CUENTA</Text>
                 </TouchableOpacity>
             </View>

@@ -10,7 +10,6 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import TransactScreen from '../screens/TransactScreen';
 import RoutesList from '../screens/RoutesList';
-import FileUpload from '../screens/FileUpload'
 
 const Tab = createBottomTabNavigator();
 
@@ -54,11 +53,10 @@ const Tabs = () => {
             }}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name = "Rutas" component={RoutesList} />
             <Tab.Screen name="Transact" component={TransactScreen} options={{ tabBarBadge: 1 }}/>
             <Tab.Screen name="Profile" component={ProfileScreen} />
             <Tab.Screen name="Edit" component={EditProfileScreen} />
-            <Tab.Screen name = "Rutas" component={RoutesList} />
-            <Tab.Screen name = "Archivos" component={FileUpload} />
             
         </Tab.Navigator>
     );

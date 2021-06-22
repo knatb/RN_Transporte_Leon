@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {TextInput, View, Alert, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import logo from '../assets/leon-logo.png';
+import Moment from 'moment';
 import firebase from 'firebase'
 require('firebase/auth')
 
@@ -14,6 +15,8 @@ export default class RegisterScreen extends Component {
         curp:  "",
         password: "",
         cpassword: "",
+        deud: "",
+        venc: (new Date()),
         errorMessage: null,
         show: false,
         mode: 'date'
@@ -24,44 +27,55 @@ export default class RegisterScreen extends Component {
         "Transporte León",
         "Usuario creado con éxito",
         [
-            { text: "OK", onPress: () => console.log("OK Pressed") }
+            { text: "Confirmar", onPress: () => console.log("OK Pressed") }
         ],
         { cancelable: false }
     );
 
-    handleRegister  = () => {
+    handleRegister  = async() => {
         const {curp, password} = this.state;
+        const Usuarios = firebase.firestore().collection('usuariosLeon');
         let error = {};
         let curpEmail = `${curp}@fieras.com`;
-        if(this.state.password != this.state.cpassword){
+        if(this.state.curp <= 17 || this.state.curp >= 19){
+            error.errorMessage = true;
+        } else if(this.state.password != this.state.cpassword){
             error.errorMessage = true;
         } else {
-            firebase.auth().createUserWithEmailAndPassword(curpEmail, password)
-            .then(useCredentials => {
-                return firebase.firestore().collection('usuariosLeon').doc(useCredentials.user.uid).set({
-                    nombre: this.state.fname,
-                    apellidos: this.state.lname,
-                    fechnam: this.state.date,
-                    curp: curpEmail,
-                    password: password
+            try{
+            
+                await firebase.auth().createUserWithEmailAndPassword(curpEmail, password)
+                .then(useCredentials => {
+                    return Usuarios.doc(useCredentials.user.uid).set({
+                        nombre: this.state.fname,
+                        apellidos: this.state.lname,
+                        fechnam: this.state.date,
+                        esdeudor: 'no',
+                        fechavencimiento: this.state.venc
+                    })
                 })
-            })
-            .then(() => { 
-                this.createAlert();
-                console.log(this.state); 
-                this.props.navigation.navigate("Login")})
-            .catch(error => 
+                .then(() => { 
+                    this.createAlert();
+                    console.log(this.state); 
+                    this.props.navigation.navigate("Login")})
+                .catch(error => 
+                    this.setState({
+                        errorMessage: error.message}
+                    ));
+            } catch(error) {
                 this.setState({
-                    errorMessage: error.message}
-                ));
+                    errorMessage: error.message
+                })
+            }
         }
     }
 
-    render() {
+    render() { 
 
         const onChangeDate = (event, selectedDate) => {
             const currentDate = selectedDate || this.state.date;
             this.setState({date:currentDate});
+            //Moment(this.state.date).format('D/M/YYYY');
             this.setState({show: false});
             console.log(this.state.date);
           };

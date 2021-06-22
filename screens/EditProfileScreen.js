@@ -84,7 +84,7 @@ const EditProfileScreen = ({navigation}) => {
                 <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
                     <Text style={styles.btnUpdate} >CANCELAR</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                <TouchableOpacity onPress={handleUpdate}>
                     <Text style={styles.btnUpdate} >ACTUALIZAR CUENTA</Text>
                 </TouchableOpacity>
             </View> 
