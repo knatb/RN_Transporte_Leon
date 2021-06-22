@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {TextInput, View, Button, Platform, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {TextInput, View, Alert, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import logo from '../assets/leon-logo.png';
 import firebase from 'firebase'
@@ -11,7 +11,6 @@ export default class RegisterScreen extends Component {
         fname: "",
         lname: "",
         date: (new Date()),
-        sexo: "",
         curp:  "",
         password: "",
         cpassword: "",
@@ -19,6 +18,16 @@ export default class RegisterScreen extends Component {
         show: false,
         mode: 'date'
     }
+
+    createAlert = () =>
+        Alert.alert(
+        "Transporte León",
+        "Usuario creado con éxito",
+        [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+    );
 
     handleRegister  = () => {
         const {curp, password} = this.state;
@@ -29,26 +38,31 @@ export default class RegisterScreen extends Component {
         } else {
             firebase.auth().createUserWithEmailAndPassword(curpEmail, password)
             .then(useCredentials => {
-                return firebase.firestore().collection('usuarios').doc(useCredentials.user.uid).set({
-                    firstName: fname,
-                    lastName: lname,
-                    age: age,
-                    gender: sexo,
+                return firebase.firestore().collection('usuariosLeon').doc(useCredentials.user.uid).set({
+                    nombre: this.state.fname,
+                    apellidos: this.state.lname,
+                    fechnam: this.state.date,
                     curp: curpEmail,
                     password: password
                 })
             })
-            .then(() => { console.log("REGISTRO EXITOSO"); console.log(this.state); this.props.navigation.navigate("Login")})
-            .catch(error => this.setState({errorMessage: error.message}));
+            .then(() => { 
+                this.createAlert();
+                console.log(this.state); 
+                this.props.navigation.navigate("Login")})
+            .catch(error => 
+                this.setState({
+                    errorMessage: error.message}
+                ));
         }
     }
 
     render() {
 
-
         const onChangeDate = (event, selectedDate) => {
             const currentDate = selectedDate || this.state.date;
             this.setState({date:currentDate});
+            this.setState({show: false});
             console.log(this.state.date);
           };
 
@@ -62,7 +76,7 @@ export default class RegisterScreen extends Component {
         };
 
         return (
-            <View style = {styles.viewLogin}>
+            <View style = {styles.viewRegister}>
                 <Image source={logo} style={{ width: 280, height: 230 }} /> 
                 <View style={styles.error}>
                     <Text>{this.state.errorMessage && 
@@ -92,19 +106,11 @@ export default class RegisterScreen extends Component {
                             <DateTimePicker
                             testID="dateTimePicker"
                             value={this.state.date}
-                            is24Hour={true}
                             display="default"
                             onChange={onChangeDate}
                             />
                         )}
                     </View>
-                    <TextInput 
-                        style={styles.inputs} 
-                        placeholder='Sexo' 
-                        keyboardType='default'
-                        onChangeText={sexo => this.setState({sexo})}
-                        value={this.state.sexo}
-                    />
                     <TextInput 
                         style={styles.inputs} 
                         placeholder='Curp' 
@@ -130,7 +136,7 @@ export default class RegisterScreen extends Component {
                     />
                     <View>
                         <TouchableOpacity onPress={this.handleRegister}>
-                            <Text style={styles.btnLogin} >Registrarme</Text>
+                            <Text style={styles.btnRegister} >Registrarme</Text>
                         </TouchableOpacity>
                     </View> 
                 </View>
@@ -140,12 +146,7 @@ export default class RegisterScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-    containers: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    viewLogin: {
+    viewRegister: {
         flex: 1,
         flexDirection: 'column',        
         alignItems: 'center',
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 7
     },
-    btnLogin:{
+    btnRegister:{
         fontSize: 20,
         backgroundColor: '#404040',
         color: '#FFF',
@@ -178,12 +179,14 @@ const styles = StyleSheet.create({
         borderRadius: 7
     },
     btnDate:{
-        fontSize: 20,
+        fontSize: 16,
         backgroundColor: '#EB9142',
         color: '#FFF',
         alignSelf: 'center',
         width: '100%',
-        padding: 15,
+        padding: 15,        
+        marginTop: 5,
+        marginBottom: 15,
         textAlign: 'center',
         borderRadius: 7
     },   

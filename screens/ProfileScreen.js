@@ -17,6 +17,7 @@ export default class ProfileScreen extends Component {
     render() {
         return (
         <View style = {styles.view}>
+            <Text style={styles.title}>MI CUENTA</Text>
             <View style={styles.datos}>
                 <Text>Francisco Fernando Cruz Galvez</Text>
                 <Text>90 años</Text>
@@ -44,12 +45,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    title:{
+        fontWeight: 'bold',
+        fontSize: 30,
+        marginTop: 100
+    },
     datos: {
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 100,
+        marginTop: 50,
         backgroundColor: '#cccccc',
         width: 300,
         borderRadius: 20
