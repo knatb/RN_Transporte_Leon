@@ -9,9 +9,7 @@ import HomeScreen from '../screens/HomeScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import TransactScreen from '../screens/TransactScreen';
-import LoadingScreen from '../screens/LoadingScreen';
 import RoutesList from '../screens/RoutesList';
-
 
 const Tab = createBottomTabNavigator();
 

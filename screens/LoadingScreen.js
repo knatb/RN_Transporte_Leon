@@ -6,7 +6,7 @@ require('firebase/auth')
 export default class LoadingScreen extends Component {
     componentDidMount(){
         firebase.auth().onAuthStateChanged(user => {
-            this.props.navigation.navigate( user ? "App" : "Auth");
+            this.props.navigation.navigate( user ? "Home" : "Login");
         })
     }
 

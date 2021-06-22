@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Button } from 'react-native';
+import React, { Component, useState } from 'react';
+import { StyleSheet, Text, View, Alert, TextInput, TouchableOpacity } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Directions } from 'react-native-gesture-handler';
-
+import firebase from 'firebase'
+require('firebase/auth')
 
 function showCurp(){
     var str = "lolk000708hgtppna1@fieras.com";
@@ -10,22 +12,42 @@ function showCurp(){
 }
 
 const EditProfileScreen = ({navigation}) => {
-    const [Fname, onChangeFName] = React.useState("");
-    const [Lname, onChangeLName] = React.useState("");
-    const [Age, onChangeAge] = React.useState("");
-    const [Gender, onChangeGender] = React.useState("");
-    const [curp, onChangeCurp] = React.useState("");
-    const [password, onChangePassword] = React.useState("");
+    const [fName, setFName] = useState("");
+    const [lName, setLName] = useState("");
+    const [date, setDate] = useState(new Date());
+    const [curp, setCurp] = useState("");
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+
+    const handleUpdate = () => {
+        navigation.navigate('Profile')
+    }
+
+    const onChangeDate = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setDate(currentDate);
+        setShow(false);
+        console.log(date);
+      };
+    
+    const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+    };
+    
+    const showDatepicker = () => {
+        showMode('date');
+    };
 
     return(
-        <View style = {styles.viewLogin}>
-            
+        <View style = {styles.view}>
+            <Text style={styles.title}>ACTUALIZA TU CUENTA</Text>
             <View style = {styles.viewForm}>
             <TextInput 
                     style={styles.inputs}
                     placeholder='LOLK000708HGTPPNA1'
                     keyboardType='default'
-                    onChangeText={onChangeCurp}
+                    onChangeText={setCurp}
                     value={curp}
                     editable={false}
                     selectTextOnFocus={false}
@@ -34,49 +56,35 @@ const EditProfileScreen = ({navigation}) => {
                     style={styles.inputs}
                     placeholder='Nombre(s)'
                     keyboardType='default'                   
-                    onChangeText={onChangeFName}
-                    value={Fname}
+                    onChangeText={setFName}
+                    value={fName}
                 />
                 <TextInput 
                     style={styles.inputs}
                     placeholder='Apellido(s)'
                     keyboardType='default'
-                    onChangeText={onChangeLName}
-                    value={Lname}
+                    onChangeText={setLName}
+                    value={lName}
                 />                      
-                <TextInput 
-                    style={styles.selectPicker}
-                    placeholder='Edad'
-                    keyboardType='numeric'
-                    onChangeText={onChangeAge}
-                    value={Age}
-                />
-                <TextInput 
-                    style={styles.selectPicker}
-                    placeholder='Sexo'
-                    keyboardType='default'
-                    onChangeText={onChangeGender}
-                    value={Gender}
-                />
-                <TextInput 
-                    style={styles.inputs}
-                    placeholder='Contraseña'
-                    keyboardType='default'
-                    secureTextEntry
-                    onChangeText={onChangePassword}
-                    value={password}
-                />
-                <TextInput 
-                    style={styles.inputs} 
-                    placeholder='Confirmar contraseña' 
-                    keyboardType='default'
-                    secureTextEntry
-                />
+                <View>
+                    <TouchableOpacity onPress={showDatepicker}>
+                        <Text style={styles.btnDate} >Seleccionar fecha de nacimiento</Text>
+                    </TouchableOpacity>
+                    {show && (
+                        <DateTimePicker
+                        testID="dateTimePicker"
+                        mode={mode}
+                        value={date}
+                        display="default"
+                        onChange={onChangeDate}
+                        />
+                    )}
+                </View>
                 <View style = {styles.containers}>
                 <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
                         <Text style={styles.btnUpdate} >CANCELAR</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                    <TouchableOpacity onPress={handleUpdate}>
                         <Text style={styles.btnUpdate} >ACTUALIZAR CUENTA</Text>
                     </TouchableOpacity>
                 </View> 
@@ -84,11 +92,17 @@ const EditProfileScreen = ({navigation}) => {
         </View>
     )
 }
+
 const styles = StyleSheet.create({
+    title:{
+        fontWeight: 'bold',
+        fontSize: 30,
+        marginBottom: 30,
+    },
     imageLogo: {
       width: '100%',
     },
-    viewLogin: {
+    view: {
         backgroundColor: '#FFF',
         flex: 1,
         flexDirection: 'column',        
@@ -101,15 +115,28 @@ const styles = StyleSheet.create({
     },
     inputs: {
         backgroundColor: '#BFBFBF',
-        color: '#FFF',
+        color: '#000000',
         borderColor: '#EB9142',
         fontWeight: 'normal',
-        fontSize: 20,
-        marginTop: 10,
-        marginBottom: 10,
+        fontSize: 16,
+        marginTop: 5,
+        marginBottom: 15,
         height: 40,
-        padding: 10
+        padding: 10,
+        borderRadius: 7
     },
+    btnDate:{
+        fontSize: 16,
+        backgroundColor: '#EB9142',
+        color: '#FFF',
+        alignSelf: 'center',
+        width: '100%',
+        padding: 15,        
+        marginTop: 5,
+        marginBottom: 15,
+        textAlign: 'center',
+        borderRadius: 7
+    }, 
     btnUpdate:{
         fontSize: 20,
         backgroundColor: '#EB9142',
@@ -142,31 +169,22 @@ const styles = StyleSheet.create({
   //naranja #EB9142
   //azul #31348F
 
-const pickerStyle = StyleSheet.create({
-    inputAndroid: {
-        fontSize: 20,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 0.5,
-        borderColor: '#9b9b9b',
-        borderRadius: 8,
-        color: '#000',
-        paddingRight: 30,
-        backgroundColor: '#fff'
-    },
-    inputiOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: '#9b9b9b',
-        borderRadius: 4,
-        color: '#000',
-        paddingRight: 30,
-        backgroundColor: '#fff',
-        marginLeft: -5,
-        marginRight: 5
-    }
-});
-
 export default EditProfileScreen;
+
+/*
+
+<TextInput 
+    style={styles.inputs}
+    placeholder='Contraseña'
+    keyboardType='default'
+    secureTextEntry
+    onChangeText={onChangePassword}
+    value={password}
+/>
+<TextInput 
+    style={styles.inputs} 
+    placeholder='Confirmar contraseña' 
+    keyboardType='default'
+    secureTextEntry
+/>
+*/
