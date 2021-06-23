@@ -1,22 +1,24 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { Directions } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import firebase from 'firebase'
 require('firebase/auth')
 
-export default class ProfileScreen extends Component {
-  
-    state = {
-        fname: "",
-        lname: "",
-        date: (new Date()),
-        deud: "",
-        venc: (new Date()),
-        errorMessage: null,
-    }
+const ProfileScreen = ({route}) => {
 
-    handleLogOut = () => { 
+    const {data, userUID} = route.params;
+
+    const [fName, setFName] = useState(data.nombre);
+    const [lName, setLName] = useState(data.apellidos);
+    const [date, setDate] = useState(data.fechnam);
+    const [deud, setDeud] = useState(data.esdeudor);
+    const [venc, setVenc] = useState(data.fechavencimiento);
+    const [errorMessage, setError] = useState(null);
+
+    const fullName = fName + " " + lName;
+
+    const handleLogOut = () => { 
         firebase.auth().signOut().then(() => {
             console.log('SALIÓ'); 
             this.props.navigation.navigate("Login")
@@ -24,30 +26,19 @@ export default class ProfileScreen extends Component {
         });
     }
 
-    handleDelete = async() => {
-        await firebase.firestore().collection('usuariosLeon').doc(user.uid).delete().then((value)=> {
-            this.handleLogOut;
-            user.delete();
-        })
-    }
-
-    getData = async() => {
-        const usuariosCol = firebase.firestore().collection('usuariosLeon')
+    const handleDelete = async() => {  
         try{
-            const dataUser = [];
-            const snapshot = await usuariosCol.doc(user.uid).get();
-
-            snapshot.forEach((doc) => {
-                dataUser.push(doc.data());
-            })
-
-        } catch(error){
-
+            await firebase.firestore().collection('usuariosLeon').doc(userUID).delete().then((value)=> {
+            firebase.auth().currentUser.delete();
+            this.props.navigation.navigate("Login");
+            console.log("BORRADO");
+        })
+        }catch(error){
+            console.log(error);
         }
-        
     }
 
-    createAlert = () =>
+    const createAlert = () =>
         Alert.alert(
         "Eliminar cuenta",
         "¿Desea eliminar su cuenta?",
@@ -57,32 +48,31 @@ export default class ProfileScreen extends Component {
                 onPress: () => console.log("Cancel Pressed"),
                 style: "cancel"
             },
-            { text: "Sí, estoy seguro", onPress: () => this.handleDelete }
+            { text: "Sí, estoy seguro", onPress: () => handleDelete() }
         ],
         { cancelable: false }
     );
 
-    render() {
-        return (
+    return (
         <View style = {styles.view}>
             <Text style={styles.title}>MI CUENTA</Text>
             <View style={styles.datos}>
-                <Text>Francisco Fernando Cruz Galvez</Text>
-                <Text>90 años</Text>
+                <Text>{fullName}</Text>
+                <Text>Edad: 90 años</Text>
                 <Text>Pagobus: Preferencial</Text>
             </View>
             <View style={styles.buttonsView}>
-                <TouchableOpacity onPress={this.handleLogOut}>
+                <TouchableOpacity onPress={handleLogOut}>
                     <Text style={styles.buttons} >CERRAR SESIÓN</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={this.createAlert}>
+                <TouchableOpacity onPress={createAlert}>
                     <Text style={styles.buttonDel} >ELIMINAR CUENTA</Text>
                 </TouchableOpacity>
             </View>
         </View>
-        )
-    }
+    )
 }
+
 // UWU 
 const styles = StyleSheet.create({
     view: {
@@ -137,7 +127,7 @@ const styles = StyleSheet.create({
     },
   });
 
-  //export default ProfileScreen;
+export default ProfileScreen;
 
   // gris claro #BFBFBF
   // gris #404040

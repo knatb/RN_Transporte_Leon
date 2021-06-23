@@ -12,6 +12,7 @@ export default class LoginScreen extends Component {
     }
 
     state = {
+        user: {},
         curp:  "",
         password: "",
         errorMessage: null
@@ -26,9 +27,21 @@ export default class LoginScreen extends Component {
         } else {
             console.log(curpEmail);
             firebase.auth().signInWithEmailAndPassword(curpEmail,password)
-            .then(() => { console.log("OK"); this.props.navigation.navigate("Tabs")})
-            
-            .catch(error => this.setState({errorMessage: error.message}));
+            .then(async(cred) => {
+                
+                const collection = await firebase.firestore().collection('usuariosLeon').doc(cred.user.uid).get();
+                console.log(collection.data());
+                
+                console.log("OK");
+                this.props.navigation.navigate("Tabs", {
+                    data: collection.data(),
+                    userUID: cred.user.uid
+                });
+
+            }).catch(error => 
+                this.setState({
+                    errorMessage: error.message}
+            ));
         }
     }
 

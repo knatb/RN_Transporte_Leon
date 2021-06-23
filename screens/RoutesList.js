@@ -11,7 +11,7 @@ export default class RoutesList extends Component {
     }
     
     onRoutesReceived = (routesList) => {
-        console.log(routesList);
+        //console.log(routesList);
         this.setState(prevState => ({
             routesList: prevState.routesList = routesList
         }));

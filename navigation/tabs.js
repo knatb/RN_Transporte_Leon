@@ -13,7 +13,7 @@ import RoutesList from '../screens/RoutesList';
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = () => {
+const Tabs = ({route}) => {
     return(
         <Tab.Navigator
             tabBarOptions={{
@@ -55,7 +55,7 @@ const Tabs = () => {
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name = "Rutas" component={RoutesList} />
             <Tab.Screen name="Transact" component={TransactScreen} options={{ tabBarBadge: 1 }}/>
-            <Tab.Screen name="Profile" component={ProfileScreen} />
+            <Tab.Screen name="Profile" component={ProfileScreen} initialParams={route.params} />
             <Tab.Screen name="Edit" component={EditProfileScreen} />
             
         </Tab.Navigator>

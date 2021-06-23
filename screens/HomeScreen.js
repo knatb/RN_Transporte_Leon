@@ -20,8 +20,8 @@ export default class HomeScreen extends Component {
                  <MapView style={styles.map} 
                  loadingEnabled = {true}
                  region={{
-                    latitude: 37.78825,
-                    longitude: -122.4324,
+                    latitude: 21.1508926,
+                    longitude: -101.7109975,
                     latitudeDelta: 0.015,
                     longitudeDelta: 0.0121,
                  }}/>
