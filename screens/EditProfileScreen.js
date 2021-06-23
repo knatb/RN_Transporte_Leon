@@ -11,17 +11,48 @@ function showCurp(){
     //document.getElementById("demo").innerHTML = res[0];
 }
 
-const EditProfileScreen = ({navigation}) => {
+const EditProfileScreen = ({navigation, route}) => {
+
+    const {data, userUID, correoCURP} = route.params;
+    const CURPREAL = correoCURP.split('@')[0].toUpperCase();
+
     const [fName, setFName] = useState("");
     const [lName, setLName] = useState("");
     const [date, setDate] = useState(new Date());
-    const [curp, setCurp] = useState("");
+    const [curp, setCurp] = useState(CURPREAL);
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
 
-    const handleUpdate = () => {
-        navigation.navigate('Profile')
+    const handleUpdate = async() => {
+        try{
+            await firebase.firestore().collection('usuariosLeon').doc(userUID).update({
+                nombre: fName,
+                apellidos: lName,
+                fechnam: date,
+            })
+            setFName("");
+            setLName("");
+            console.log("ACTUALIZADO");
+            alert("Actualización exitosa :)");
+        }catch(e){
+            console.log(e);
+        }
     }
+
+    const createAlert = () =>
+        Alert.alert(
+        "Actualizar cuenta",
+        "¿Está seguro que desea actualizar su cuenta?",
+        [
+            {
+                text: "Cancelar",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+            },
+            { text: "Confirmar", onPress: () => handleUpdate() }
+        ],
+        { cancelable: false }
+    );
 
     const onChangeDate = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -43,11 +74,9 @@ const EditProfileScreen = ({navigation}) => {
         <View style = {styles.view}>
             <Text style={styles.title}>ACTUALIZA TU CUENTA</Text>
             <View style = {styles.viewForm}>
-            <TextInput 
+                <TextInput 
                     style={styles.inputs}
-                    placeholder='LOLK000708HGTPPNA1'
                     keyboardType='default'
-                    onChangeText={setCurp}
                     value={curp}
                     editable={false}
                     selectTextOnFocus={false}
@@ -82,9 +111,9 @@ const EditProfileScreen = ({navigation}) => {
                 </View>
                 <View style = {styles.containers}>
                 <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                    <Text style={styles.btnUpdate} >CANCELAR</Text>
+                    <Text style={styles.btnCancel} >CANCELAR</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleUpdate}>
+                <TouchableOpacity onPress={createAlert}>
                     <Text style={styles.btnUpdate} >ACTUALIZAR CUENTA</Text>
                 </TouchableOpacity>
             </View> 
@@ -113,6 +142,11 @@ const styles = StyleSheet.create({
     viewForm:{
         width: '70%'
     },
+    CURP:{
+        fontSize: 30,
+        color: '#FFF',
+        backgroundColor: '#EB9142'
+    },  
     inputs: {
         backgroundColor: '#BFBFBF',
         color: '#000000',
@@ -140,6 +174,16 @@ const styles = StyleSheet.create({
     btnUpdate:{
         fontSize: 20,
         backgroundColor: '#EB9142',
+        color: '#FFF',
+        alignSelf: 'center',
+        width: '100%',
+        padding: 15,
+        textAlign: 'center',        
+        marginTop: 10
+    },
+    btnCancel:{
+        fontSize: 20,
+        backgroundColor: '#404040',
         color: '#FFF',
         alignSelf: 'center',
         width: '100%',

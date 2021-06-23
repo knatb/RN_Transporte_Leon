@@ -12,7 +12,6 @@ export default class LoginScreen extends Component {
     }
 
     state = {
-        user: {},
         curp:  "",
         password: "",
         errorMessage: null
@@ -35,7 +34,8 @@ export default class LoginScreen extends Component {
                 console.log("OK");
                 this.props.navigation.navigate("Tabs", {
                     data: collection.data(),
-                    userUID: cred.user.uid
+                    userUID: cred.user.uid,
+                    correoCURP: cred.user.email
                 });
 
             }).catch(error => 

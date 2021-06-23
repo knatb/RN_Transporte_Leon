@@ -12,8 +12,8 @@ const ProfileScreen = ({route}) => {
     const [fName, setFName] = useState(data.nombre);
     const [lName, setLName] = useState(data.apellidos);
     const [date, setDate] = useState(data.fechnam);
-    const [deud, setDeud] = useState(data.esdeudor);
-    const [venc, setVenc] = useState(data.fechavencimiento);
+    //const [deud, setDeud] = useState(data.esdeudor);
+    //const [venc, setVenc] = useState(data.fechavencimiento);
     const [errorMessage, setError] = useState(null);
 
     const fullName = fName + " " + lName;
@@ -22,13 +22,13 @@ const ProfileScreen = ({route}) => {
         firebase.auth().signOut().then(() => {
             console.log('SALIÓ'); 
             this.props.navigation.navigate("Login")
-            this.state.fname = "";
+            //this.state.fname = "";
         });
     }
 
     const handleDelete = async() => {  
         try{
-            await firebase.firestore().collection('usuariosLeon').doc(userUID).delete().then((value)=> {
+            await firebase.firestore().collection('usuariosLeon').doc(userUID).delete().then(()=> {
             firebase.auth().currentUser.delete();
             this.props.navigation.navigate("Login");
             console.log("BORRADO");

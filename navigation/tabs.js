@@ -52,11 +52,20 @@ const Tabs = ({route}) => {
                 inactiveTintColor: 'gray',
             }}
         >
-            <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name = "Rutas" component={RoutesList} />
-            <Tab.Screen name="Transact" component={TransactScreen} options={{ tabBarBadge: 1 }}/>
-            <Tab.Screen name="Profile" component={ProfileScreen} initialParams={route.params} />
-            <Tab.Screen name="Edit" component={EditProfileScreen} />
+            <Tab.Screen name="Home" 
+                component={HomeScreen} />
+            <Tab.Screen name = "Rutas" 
+                component={RoutesList} />
+            <Tab.Screen name="Transact" 
+                component={TransactScreen}
+                initialParams={route.params}
+                options={{ tabBarBadge: 1 }}/>
+            <Tab.Screen name="Profile" 
+                component={ProfileScreen} 
+                initialParams={route.params} />
+            <Tab.Screen name="Edit" 
+                component={EditProfileScreen}
+                initialParams={route.params} />
             
         </Tab.Navigator>
     );
