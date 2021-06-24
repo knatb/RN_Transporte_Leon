@@ -24,8 +24,9 @@ export default class RoutesList extends Component {
     render(){
         const lista = this.state.routesList;
 
-        return (
+        return (        
             <ScrollView style={styles.container}>
+                <Text style={styles.inputs}>LISTADO DE RUTAS</Text>
                 <View>
                 {
                 lista.map((l, i) => (
@@ -60,5 +61,24 @@ const styles = StyleSheet.create({
     },
     ratingText: {
         color: 'grey'
-    }
+    },
+    title:{
+        fontWeight: 'bold',
+        fontSize: 30,
+        marginTop: 100,
+        height:50
+    },
+    inputs: {
+        color: '#000000',
+        backgroundColor: '#f6901e',
+        borderColor: '#f6901e',
+        fontWeight: 'normal',
+        fontSize: 24,
+        marginTop: 5,
+        marginBottom: 15,
+        height: 50,
+        padding: 10,
+        textAlign:'center',
+        fontFamily:'sans-serif'
+    },
 })

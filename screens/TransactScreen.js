@@ -20,17 +20,6 @@ const TransactScreen = ({route}) => {
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
 
-  /*async componentDidMount() {
-    if (Platform.OS !== "web") {
-      const {
-        status,
-      } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        alert("Habilita los permisos de la cámara");
-      }
-    }
-  }*/
-
   const _maybeRenderUploadingOverlay = () => {
     if (uploading) {
       return (
@@ -48,19 +37,27 @@ const TransactScreen = ({route}) => {
         </View>
       );
     }
+    return(
+      <View></View>
+    );
   };
 
   const _maybeRenderImage = () => {
-    let { image } = setImage;
+    //let { image } = image;
     if (!image) {
-      return;
+      return(
+        <View>
+          <Text>No hay imagen seleccionada</Text>
+        </View>
+      );
     }
 
     return (
       <View
         style={{
           marginTop: 30,
-          width: 250,
+          marginBottom: 15,
+          width: 200,
           borderRadius: 3,
           elevation: 2,
         }}
@@ -76,7 +73,7 @@ const TransactScreen = ({route}) => {
             overflow: "hidden",
           }}
         >
-          <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
+          <Image source={{ uri: image }} style={{ width: 100, height: 150 }} />
         </View>
       </View>
     );
@@ -120,48 +117,9 @@ const TransactScreen = ({route}) => {
     } finally {
       setUploading(false);
     }
-  };
+  };  
 
-  return(
-    <View style = {styles.view}>
-        <View style={styles.data}>
-            <Text style={styles.datainfo}>
-              FECHA DE VENCIMIENTO dd/MM/yyyy
-            </Text>
-            <Text style={styles.datainfo}>
-              Por favor anexa tu documento para proceder 
-              a la renovación de tu tarjeta PagoBus. 
-              De esta forma te evitaras...
-            </Text>
-        </View>
-        <View style={styles.fileView}>
-            {!!image && (
-                <Text
-                    style={{
-                    fontSize: 20,
-                    marginBottom: 20,
-                    textAlign: "center",
-                    marginHorizontal: 15,
-                    }}
-                >  {image}
-                </Text>
-            )}
-            <TouchableOpacity style={styles.fileSelect} onPress={_pickImage}>
-                <Text style={{color:'#FFF'}} >Seleccionar archivo...</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.fileSelect} onPress={_takePhoto}>
-                <Text style={{color:'#FFF'}} >Tomar foto</Text>
-            </TouchableOpacity>
-
-            {_maybeRenderImage}
-            {_maybeRenderUploadingOverlay}
-    
-            <StatusBar barStyle="default" />
-        </View>
-    </View>
-  )
-
-  async function uploadImageAsync(uri) {
+  const  uploadImageAsync = async(uri) => {
     // Why are we using XMLHttpRequest? See:
     // https://github.com/expo/expo/issues/2402#issuecomment-443726662
     const blob = await new Promise((resolve, reject) => {
@@ -182,13 +140,44 @@ const TransactScreen = ({route}) => {
     const ref = firebase.storage().ref().child(`${userUID}/${fileName}`);
 
     const snapshot = await ref.put(blob);
-    console.log(uploading);
 
     // We're done with the blob, close and release it
     blob.close();  
 
     return await snapshot.ref.getDownloadURL();
   }
+
+  return(
+
+    <View style = {styles.view}>
+        <Text style={styles.titulos}>RENOVAR</Text>
+        <View style={styles.data}>
+            <Text style={styles.titulos2}>
+              Su documento se anexó por última vez el: {venc}
+            </Text>
+            <Text style={styles.datainfo}>
+              Por favor anexa tu documento para proceder 
+              a la renovación de tu tarjeta PagoBus. 
+              De esta forma te seguiras teniendo acceso
+              a los servicios de Transporte León
+            </Text>
+        </View>
+        <View style={styles.fileView}>
+            {!!image && _maybeRenderImage()}
+            <TouchableOpacity style={styles.fileSelect} onPress={_pickImage}>
+                <Text style={{color:'#FFF'}} >Seleccionar archivo...</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.fileSelect} onPress={_takePhoto}>
+                <Text style={{color:'#FFF'}} >Tomar foto</Text>
+            </TouchableOpacity>
+            
+            {_maybeRenderUploadingOverlay()}
+
+            <StatusBar barStyle="default" />
+        </View>
+    </View>
+
+  )
 }
 
 const styles = StyleSheet.create({
@@ -203,13 +192,14 @@ const styles = StyleSheet.create({
     data: {
         flex: 1,
         flexDirection: 'column',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
+        alignItems: 'center',
+        justifyContent: 'center',
         marginTop: 20,
         width: 350
     },
     datainfo:{
-        margin: 30
+        margin: 30,
+        textAlign: 'justify'
     },
     fileView:{
         flex: 1,
@@ -233,7 +223,33 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 5,
-    }
+    },
+    titulos: {
+      color: '#000000',
+      backgroundColor: '#f6901e',
+      borderColor: '#EB9142',
+      fontWeight: 'normal',
+      fontSize: 24,
+      marginTop: 5,
+      marginBottom: 15,
+      height: 50,
+      width:'100%',
+      padding: 10,
+      textAlign:'center',
+      fontFamily:'sans-serif'
+  },
+  titulos2: {
+    color: '#000000',
+    borderColor: '#EB9142',
+    fontWeight: 'normal',
+    fontSize: 16,
+    marginTop: 5,
+    marginBottom: 15,
+    height: 80,
+    padding: 10,
+    textAlign:'center',
+    fontFamily:'sans-serif'
+  },
 });
 
 export default TransactScreen;

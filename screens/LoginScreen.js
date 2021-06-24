@@ -118,15 +118,16 @@ const styles = StyleSheet.create({
     },
     inputs: {
         backgroundColor: '#BFBFBF',
-        color: '#FFF',
+        color: '#000000',
         borderColor: '#EB9142',
         fontWeight: 'normal',
         fontSize: 16,
-        marginTop: 10,
-        marginBottom: 20,
+        marginTop: 5,
+        marginBottom: 15,
         height: 40,
         padding: 10,
-        borderRadius: 7
+        borderRadius: 7,
+        width: 230,
     },
     btnLogin:{
         fontSize: 20,
@@ -159,4 +160,4 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
 
     }
-  });
+});

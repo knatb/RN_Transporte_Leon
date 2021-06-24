@@ -35,24 +35,33 @@ export default class RegisterScreen extends Component {
     handleRegister  = async() => {
         const {curp, password} = this.state;
         const Usuarios = firebase.firestore().collection('usuariosLeon');
+
+        const formattedBirth = Moment(this.state.date).format('D/M/YYYY');
+        const formattedVenc = Moment(this.state.venc).format('D/M/YYYY');
+
         let error = {};
         let curpEmail = `${curp}@fieras.com`;
+
         if(this.state.curp <= 17 || this.state.curp >= 19){
             error.errorMessage = true;
         } else if(this.state.password != this.state.cpassword){
             error.errorMessage = true;
         } else {
-            try{
+            try {
             
                 await firebase.auth().createUserWithEmailAndPassword(curpEmail, password)
                 .then(useCredentials => {
-                    return Usuarios.doc(useCredentials.user.uid).set({
+
+                    const CreatedUser = {
                         nombre: this.state.fname,
                         apellidos: this.state.lname,
-                        fechnam: this.state.date,
+                        fechnam: formattedBirth,
                         esdeudor: 'no',
-                        fechavencimiento: this.state.venc
-                    })
+                        fechavencimiento: formattedVenc
+                    }
+                    console.log(CreatedUser);
+
+                    return Usuarios.doc(useCredentials.user.uid).set(CreatedUser);
                 })
                 .then(() => { 
                     this.createAlert();
@@ -70,15 +79,15 @@ export default class RegisterScreen extends Component {
         }
     }
 
-    render() { 
+    render() {
+        const formattedDate = Moment(this.state.date).format('D/M/YYYY');
 
         const onChangeDate = (event, selectedDate) => {
-            const currentDate = selectedDate || this.state.date;
+            const currentDate = selectedDate || formattedDate;
             this.setState({date:currentDate});
-            //Moment(this.state.date).format('D/M/YYYY');
             this.setState({show: false});
-            console.log(this.state.date);
-          };
+            console.log(formattedDate);
+        };
 
         const showMode = (currentMode) => {
             this.setState({show: true});
@@ -120,6 +129,7 @@ export default class RegisterScreen extends Component {
                             <DateTimePicker
                             testID="dateTimePicker"
                             value={this.state.date}
+                            mode ={this.state.mode}
                             display="default"
                             onChange={onChangeDate}
                             />
@@ -215,4 +225,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     }
-  });
+});

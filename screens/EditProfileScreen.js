@@ -2,14 +2,9 @@ import React, { Component, useState } from 'react';
 import { StyleSheet, Text, View, Alert, TextInput, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Directions } from 'react-native-gesture-handler';
+import Moment from 'moment';
 import firebase from 'firebase'
 require('firebase/auth')
-
-function showCurp(){
-    var str = "lolk000708hgtppna1@fieras.com";
-    var res = str.split("@");
-    //document.getElementById("demo").innerHTML = res[0];
-}
 
 const EditProfileScreen = ({navigation, route}) => {
 
@@ -24,18 +19,28 @@ const EditProfileScreen = ({navigation, route}) => {
     const [show, setShow] = useState(false);
 
     const handleUpdate = async() => {
-        try{
-            await firebase.firestore().collection('usuariosLeon').doc(userUID).update({
-                nombre: fName,
-                apellidos: lName,
-                fechnam: date,
-            })
-            setFName("");
-            setLName("");
-            console.log("ACTUALIZADO");
-            alert("Actualización exitosa :)");
-        }catch(e){
-            console.log(e);
+        
+        const formattedDate = Moment(date).format('D/M/YYYY');
+        console.log(formattedDate);
+
+        if(fName == ""){
+            alert("Por favor ingresa un nombre");
+        } else if(lName == ""){
+            alert("Por favor ingresa tu(s) apellido(s)");
+            } else {
+                try {
+                    await firebase.firestore().collection('usuariosLeon').doc(userUID).update({
+                        nombre: fName,
+                        apellidos: lName,
+                        fechnam: formattedDate,
+                    });
+                    
+                    setFName("");
+                    setLName("");
+                    alert("Actualización exitosa :)");
+                } catch(e) {
+                    console.log(e);
+                }
         }
     }
 
@@ -56,6 +61,7 @@ const EditProfileScreen = ({navigation, route}) => {
 
     const onChangeDate = (event, selectedDate) => {
         const currentDate = selectedDate || date;
+        //Moment(currentDate).format('D/M/YYYY');
         setDate(currentDate);
         setShow(false);
         console.log(date);

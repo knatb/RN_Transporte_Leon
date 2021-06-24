@@ -44,6 +44,9 @@ const Tabs = ({route}) => {
                 } else if (route.name === 'Edit') {
                     iconName = focused ? 'people-circle' : 'person-outline';
                 } 
+                else if (route.name === 'Rutas') {
+                    iconName = focused ? 'bus' : 'bus-outline';
+                } 
                 return <Ionicons name={iconName} size={size} color={color} />;
                 },
             })}
