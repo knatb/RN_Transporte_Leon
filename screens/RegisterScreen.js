@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {TextInput, View, Alert, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import logo from '../assets/leon-logo.png';
-import Moment from 'moment';
+import moment from 'moment';
 import firebase from 'firebase'
 require('firebase/auth')
 
@@ -36,8 +36,8 @@ export default class RegisterScreen extends Component {
         const {curp, password} = this.state;
         const Usuarios = firebase.firestore().collection('usuariosLeon');
 
-        const formattedBirth = Moment(this.state.date).format('D/M/YYYY');
-        const formattedVenc = Moment(this.state.venc).format('D/M/YYYY');
+        const formattedBirth = moment(this.state.date).format('D/M/YYYY');
+        const formattedVenc = moment(this.state.venc).format('D/M/YYYY');
 
         let error = {};
         let curpEmail = `${curp}@fieras.com`;
@@ -80,7 +80,7 @@ export default class RegisterScreen extends Component {
     }
 
     render() {
-        const formattedDate = Moment(this.state.date).format('D/M/YYYY');
+        const formattedDate = moment(this.state.date).format('D/M/YYYY');
 
         const onChangeDate = (event, selectedDate) => {
             const currentDate = selectedDate || formattedDate;

@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import { StyleSheet, Text, View, Alert, TextInput, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Directions } from 'react-native-gesture-handler';
-import Moment from 'moment';
+import moment from 'moment';
 import firebase from 'firebase'
 require('firebase/auth')
 
@@ -19,15 +19,15 @@ const EditProfileScreen = ({navigation, route}) => {
     const [show, setShow] = useState(false);
 
     const handleUpdate = async() => {
-        
-        const formattedDate = Moment(date).format('D/M/YYYY');
-        console.log(formattedDate);
+
+        const formattedDate = moment(date).format('D/M/YYYY');
 
         if(fName == ""){
             alert("Por favor ingresa un nombre");
         } else if(lName == ""){
             alert("Por favor ingresa tu(s) apellido(s)");
             } else {
+                console.log(formattedDate);
                 try {
                     await firebase.firestore().collection('usuariosLeon').doc(userUID).update({
                         nombre: fName,
@@ -64,7 +64,9 @@ const EditProfileScreen = ({navigation, route}) => {
         //Moment(currentDate).format('D/M/YYYY');
         setDate(currentDate);
         setShow(false);
-        console.log(date);
+        
+        console.log("SELECTED ")
+        console.log(selectedDate);
       };
     
     const showMode = (currentMode) => {

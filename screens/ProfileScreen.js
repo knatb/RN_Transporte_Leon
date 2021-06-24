@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { Directions } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import Moment from 'moment';
+import moment from 'moment';
 import firebase from 'firebase'
+import { set } from 'date-fns';
 require('firebase/auth')
 
 const ProfileScreen = ({navigation, route}) => {
@@ -15,14 +16,30 @@ const ProfileScreen = ({navigation, route}) => {
     const [date, setDate] = useState(data.fechnam);
     const [errorMessage, setError] = useState(null);
 
+    useEffect(() => {
+        const connectionListenner = firebase.firestore().collection('usuariosLeon').doc(userUID).onSnapshot(docSnapshot => {
+            const dataFirebase = docSnapshot.data();
+            setFName(dataFirebase.nombre);
+            setLName(dataFirebase.apellidos);
+            setDate(dataFirebase.fechnam);
+            // ...
+          }, err => {
+            console.log(`Encountered error: ${err}`);
+          });
+
+        return () => {
+            connectionListenner();
+        }
+    },[])    
+
     const fullName = fName + " " + lName;
 
     const calculateAge = () => {
         var today = new Date(); 
         var birth = date;
 
-        var todayYear = Moment(today).year();
-        var birthYear = Moment(birth).year();
+        var todayYear = moment(today).year();
+        var birthYear = moment(birth).year();
 
         var age_now = parseInt(todayYear) - parseInt(birthYear);
         return age_now;
