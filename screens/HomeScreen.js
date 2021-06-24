@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {View, StyleSheet, ActivityIndicator, Image, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
-//import mapa from '../assets/mapa.png'
 import firebase from 'firebase'
 require('firebase/auth')
 
@@ -12,8 +11,6 @@ export default class HomeScreen extends Component {
         })
     }
 
-    //<Image source={mapa} style={{ width: 320, height: 750 }}></Image>
-    //MARKER
     render() {
         return (
             <View style={styles.container}>

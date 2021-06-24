@@ -222,21 +222,3 @@ const styles = StyleSheet.create({
   //azul #31348F
 
 export default EditProfileScreen;
-
-/*
-
-<TextInput 
-    style={styles.inputs}
-    placeholder='Contraseña'
-    keyboardType='default'
-    secureTextEntry
-    onChangeText={onChangePassword}
-    value={password}
-/>
-<TextInput 
-    style={styles.inputs} 
-    placeholder='Confirmar contraseña' 
-    keyboardType='default'
-    secureTextEntry
-/>
-*/

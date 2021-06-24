@@ -49,7 +49,6 @@ const ProfileScreen = ({navigation, route}) => {
         firebase.auth().signOut().then(() => {
             console.log('SALIÓ'); 
             navigation.navigate("Login")
-            //this.state.fname = "";
         });
     }
 
